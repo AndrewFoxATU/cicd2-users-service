@@ -1,4 +1,3 @@
-# users_service/schemas.py
 from pydantic import BaseModel
 from typing import Optional, Literal
 
@@ -18,9 +17,9 @@ class UserLogin(BaseModel):
     name: str
     password: str
 
-
 class UserRead(UserBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
