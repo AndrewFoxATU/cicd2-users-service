@@ -46,25 +46,11 @@ def commit_or_rollback(db: Session, msg: str):
 #                 HEALTH
 # ===============================================
 
-@app.get("/health")
+@app.get("/healthy")
 def health():
-    return {"status": "ok"}
+    return {"status": "ok ok"}
 
-# -----------------------------
-# LOGIN
-# -----------------------------
-@app.post("/api/login", response_model=UserRead)
-def login(payload: UserLogin, db: Session = Depends(get_db)):
-    stmt = select(User).where(User.name == payload.name)
-    user = db.execute(stmt).scalar_one_or_none()
 
-    if not user or user.password != payload.password:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid username or password",
-        )
-
-    return user
 
 # ===============================================
 #                 USERS CRUD
@@ -101,6 +87,21 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
+# -----------------------------
+# LOGIN
+# -----------------------------
+@app.post("/api/login", response_model=UserRead)
+def login(payload: UserLogin, db: Session = Depends(get_db)):
+    stmt = select(User).where(User.name == payload.name)
+    user = db.execute(stmt).scalar_one_or_none()
+
+    if not user or user.password != payload.password:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password",
+        )
+
+    return user
 
 # -----------------------------
 # UPDATE USER (PUT)
