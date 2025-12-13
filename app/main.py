@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.database import engine, get_db
 from app.models import Base, User
-from app.schemas import UserCreate, UserRead, UserUpdate
+from app.schemas import UserCreate, UserRead, UserUpdate, UserLogin
 
 
 # ===============================================
@@ -50,6 +50,21 @@ def commit_or_rollback(db: Session, msg: str):
 def health():
     return {"status": "ok"}
 
+# -----------------------------
+# LOGIN
+# -----------------------------
+@app.post("/api/login", response_model=UserRead)
+def login(payload: UserLogin, db: Session = Depends(get_db)):
+    stmt = select(User).where(User.name == payload.name)
+    user = db.execute(stmt).scalar_one_or_none()
+
+    if not user or user.password != payload.password:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password",
+        )
+
+    return user
 
 # ===============================================
 #                 USERS CRUD

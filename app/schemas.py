@@ -14,6 +14,11 @@ class UserUpdate(BaseModel):
     permissions: Optional[Literal["admin", "employee", "employee+"]] = None
     password: Optional[str] = None
 
+class UserLogin(BaseModel):
+    name: str
+    password: str
+
+
 class UserRead(UserBase):
     id: int
 
