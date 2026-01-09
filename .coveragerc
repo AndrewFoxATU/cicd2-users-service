@@ -1,0 +1,3 @@
+[run]
+omit =
+    app/user_rpc_worker.py
