@@ -36,3 +36,4 @@ uvicorn==0.35.0
 bcrypt==4.3.0
 PyJWT==2.10.1
 aio_pika
+alembic==1.13.3
